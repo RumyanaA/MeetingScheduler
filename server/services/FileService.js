@@ -10,5 +10,14 @@ class FileService {
             console.error(err)
         }
     }
+    static writeFile(file){
+        try {
+            var StringifiedData=JSON.stringify(file);
+            fs.writeFileSync('C:\\Users\\rumya\\Desktop\\meetingScheduler\\MeetingScheduler\\server\\config\\Room Scheduled_JSON file.txt', StringifiedData)
+           
+          } catch (err) {
+            console.error(err)
+          }
+    }
 }
 module.exports = FileService
