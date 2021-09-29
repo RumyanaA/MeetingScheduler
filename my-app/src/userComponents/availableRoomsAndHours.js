@@ -1,6 +1,7 @@
 import React from "react";
 import { Component } from "react";
 import moment from 'moment-timezone';
+import axios from "axios";
 
 class AvailableRoomsAndHours extends Component {
     constructor(props) {
@@ -9,6 +10,25 @@ class AvailableRoomsAndHours extends Component {
             pickedRoom:'',
             pickedTime:''
         }
+        this.allAvailable=props.HoursToDisplay
+        this.submit=this.submit.bind(this);
+    }
+
+    async submit(event){
+        var value=event.currentTarget.name
+        var firstIndex=parseInt(value[0]);
+        var secondIndex=parseInt(value[2]);
+        var userData={
+            pickedRoom:this.allAvailable[firstIndex].name,
+            pickedTime:this.allAvailable[firstIndex].availableHours[secondIndex]
+        }
+        var convertTimeZone=moment(new Date(userData.pickedTime.from).toString()).format('YYYY-MM-DDTHH:mm');
+        userData.pickedTime.from=convertTimeZone;
+        convertTimeZone= moment(new Date(userData.pickedTime.to).toString()).format('YYYY-MM-DDTHH:mm');
+        userData.pickedTime.to=convertTimeZone;
+        var result = await axios.post('http://localhost:8081/insertScheduledTime', userData)
+        var arr=[];
+        this.props.getData('availableHours', arr);
     }
     render() {
         var availableTimes = this.props.HoursToDisplay
@@ -29,9 +49,10 @@ class AvailableRoomsAndHours extends Component {
                                         convertToDate=new Date(time.to).toString();
                                         return(
                                         <li  key={i}>
+                                            {/* <button onClick={this.submit} id={i}>{'from: ' + moment(convertFromDate).format("HH:mm")} {' to ' + moment(convertToDate).format("HH:mm")}</button> */}
                                             <span>{'from: ' + moment(convertFromDate).format("HH:mm")}</span>
                                             <span>{' to ' + moment(convertToDate).format("HH:mm")}</span>
-                                            <button>Select</button>
+                                            <button name={`${index},${i}`} onClick={this.submit}>Select</button>
                                         </li>
                                         )
                                     })}

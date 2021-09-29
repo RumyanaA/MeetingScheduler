@@ -42,7 +42,7 @@ async submit(){
             <input placeholder='Capacity' name='capacity' onChange={this.handleChange}></input>
             <input placeholder='duration' name='duration' onChange={this.handleChange}></input>
             <button type='button' onClick={this.submit}>Check available times</button>
-            {(thisState.length>0)?<AvailableRoomsAndHours HoursToDisplay={thisState}/>:null}
+            {(thisState.length>0)?<AvailableRoomsAndHours HoursToDisplay={thisState} getData={this.getData}/>:null}
             </div>
         )
     }
