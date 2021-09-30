@@ -14,9 +14,10 @@ class FileService {
         try {
             var StringifiedData=JSON.stringify(file);
             fs.writeFileSync('C:\\Users\\rumya\\Desktop\\meetingScheduler\\MeetingScheduler\\server\\config\\Room Scheduled_JSON file.txt', StringifiedData)
-           
+            return 'Meeting hour saved successfully'
           } catch (err) {
             console.error(err)
+            return 'Something went wrong :/'
           }
     }
 }

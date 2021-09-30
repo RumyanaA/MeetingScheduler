@@ -40,3 +40,46 @@
 .li_of_times{
   list-style-type: none;
 }
+.userForm{
+  position:relative;
+  left:30px;
+  top:50px;
+}
+.heading{
+  position: relative;
+  bottom:30px;
+}
+.userInput{
+  display:block;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+.errorMsg{
+  margin-bottom: 10px;
+  display:block;
+  color: red;
+}
+.onSaveMsg{
+  margin-bottom: 10px;
+  display:block;
+  color: green;
+}
+.unscheduledHours{
+  position: absolute;
+  left:300px;
+  top:-45px;
+  
+  
+}
+.availableRoom{
+  display:inline-table;
+  position:relative;
+  padding:5px;
+  top:50px;
+  right:220px;
+  margin-left:10px;
+  
+}
+.selectTime{
+  margin-left:10px;
+}

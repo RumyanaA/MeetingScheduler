@@ -6,11 +6,11 @@ module.exports=class insertService{
         var file = FileService.readFromFile();
         file.forEach((item)=>{
             if(item.roomName==selectedRoomName){
-                item.schedule.push(selectedTimes)
+                item.schedule.push(selectedTimes);
             }
         })
         
-        FileService.writeFile(file)
-
+       var result = FileService.writeFile(file);
+        return result;
     }
 }

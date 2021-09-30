@@ -10,7 +10,9 @@ constructor(props){
         capacity: 0,
         from: new Date(),
         duration:0,
-        availableHours:[]
+        availableHours:[],
+        messageOnSave:'',
+        messageOnError:''
     }
     this.handleChange = this.handleChange.bind(this);
     this.submit = this.submit.bind(this);
@@ -26,23 +28,39 @@ getData(field, data) {
 }
 async submit(){
     var userData={
-        capacity:this.state.capacity,
-        duration:this.state.duration,
+        capacity:parseInt(this.state.capacity),
+        duration:parseInt(this.state.duration),
         from:this.state.from
     }
+    if(!(userData.capacity>0 && userData.capacity<13)){
+        this.setState({messageOnError:'Capacity must be between 1 and 13 people'})
+    }else if(userData.duration<=0){
+        this.setState({messageOnError: 'Duration time required'})
+    }
+    else{
     var result = await axios.post('http://localhost:8081/getUnscheduledHours', userData)
     console.log(result.data)
-    this.setState({availableHours:result.data})
+    this.setState({availableHours:result.data,messageOnError:''})
+}
 }
     render(){
-        var thisState=this.state.availableHours
+        var hoursToDisplay=this.state.availableHours;
+        var selectedDate=this.state.from;
+        if(this.state.messageOnSave.length>0){
+            setTimeout(() => {
+                this.setState({messageOnSave:''})
+            }, 3000);
+        }
         return(
-            <div>
-                <DateComponent class='' minDate={moment().toDate()} getData={this.getData} taskDate={moment(this.state.from).toDate()}/>
-            <input placeholder='Capacity' name='capacity' onChange={this.handleChange}></input>
-            <input placeholder='duration' name='duration' onChange={this.handleChange}></input>
+            <div className='userForm'>
+                <h className='heading'><b>Schedule a meeting</b></h>
+                <DateComponent class='userInput' minDate={moment().toDate()} getData={this.getData} taskDate={moment(this.state.from).toDate()}/>
+            <input className='userInput' placeholder='Capacity' name='capacity' onChange={this.handleChange}></input>
+            <input className='userInput' placeholder='Meeting duration in minutes' name='duration' onChange={this.handleChange}></input>
+            <span className='errorMsg'>{this.state.messageOnError}</span>
             <button type='button' onClick={this.submit}>Check available times</button>
-            {(thisState.length>0)?<AvailableRoomsAndHours HoursToDisplay={thisState} getData={this.getData}/>:null}
+            <span className='onSaveMsg'>{this.state.messageOnSave}</span>
+            {(hoursToDisplay.length>0)?<AvailableRoomsAndHours displayDate={selectedDate} HoursToDisplay={hoursToDisplay} getData={this.getData}/>:null}
             </div>
         )
     }
